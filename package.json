@@ -1,0 +1,24 @@
+{
+  "name": "Artik",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/water-alchemists/Artik.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/water-alchemists/Artik/issues"
+  },
+  "homepage": "https://github.com/water-alchemists/Artik#readme",
+  "devDependencies": {
+    "es6-shim": "^0.33.13",
+    "express": "^4.13.3"
+  }
+}
