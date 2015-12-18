@@ -1,4 +1,4 @@
-var router = require('express').Router();
+'use strict';
 
 module.exports = function(app){
 	var paths = [
