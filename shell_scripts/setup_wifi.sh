@@ -2,11 +2,11 @@
 echo "Seems you want to start up your wifi hotspot and server on the Artik."
 echo "Was this a mistake? Y/n"
 read MISTAKE
-if [$MISTAKE != "Y"]
+if [ $MISTAKE != "Y" ]
 then
 echo "Cool. Do you want to configure the settings for your wifi hotspot? Y/n"
 echo HOTSPOT
-	if[$HOTSPOT != "Y"]
+	if [ $HOTSPOT != "Y" ]
 	then
 		configure
 	fi
@@ -79,43 +79,43 @@ configure() {
 
 #Starts up the server and wifi
 start(){
-echo "Starting up..."
-echo "Stopping NetworkManager..."
-service NetworkManager stop
-if [$? != 0]
-then
-	echo "Couldn't stop NetworkManager."
-	exit 1
-fi
+	echo "Starting up..."
+	echo "Stopping NetworkManager..."
+	service NetworkManager stop
+	if [ $? != 0 ]
+	then
+		echo "Couldn't stop NetworkManager."
+		exit 1
+	fi
 
-echo "Configuring WiFi module operation mode..."
-modprobe -r dhd
-modprobe dhd op_mode=2
-if[$? != 0]
-then
-	echo "Couldn't configure DHD."
-	exit 1
-fi
+	echo "Configuring WiFi module operation mode..."
+	modprobe -r dhd
+	modprobe dhd op_mode=2
+	if [ $? != 0 ]
+	then
+		echo "Couldn't configure DHD."
+		exit 1
+	fi
 
-echo "Configuring DNSMASQ..."
-dnsmasq -C /etc/dnsmasq.conf
-if[$? != 0]
-then 
-	echo "Couldn't configure DNSMASQ."
-	exit 1
-fi
+	echo "Configuring DNSMASQ..."
+	dnsmasq -C /etc/dnsmasq.conf
+	if [ $? != 0 ]
+	then
+		echo "Couldn't configure DNSMASQ."
+		exit 1
+	fi
 
-echo "Configuring driver & firmware files..."
-ifconfig wlan0 down
-echo "/etc/wifi/4354a1_apsta.bin" > /sys/module/dhd/parameters/firmware_path
-ifconfig wlan0 up
-ifconfig wlan0 down
-echo 2 > /sys/module/dhd/parameters/op_mode
-ifconfig wlan0 up
-echo "Configuration completed."
+	echo "Configuring driver & firmware files..."
+	ifconfig wlan0 down
+	echo "/etc/wifi/4354a1_apsta.bin" > /sys/module/dhd/parameters/firmware_path
+	ifconfig wlan0 up
+	ifconfig wlan0 down
+	echo 2 > /sys/module/dhd/parameters/op_mode
+	ifconfig wlan0 up
+	echo "Configuration completed."
 
-echo "Starting Hostapd in the background..."
-hostapd /etc/hostapd/hostapd.conf -B
+	echo "Starting Hostapd in the background..."
+	hostapd /etc/hostapd/hostapd.conf -B
 
-echo "Setup all completed"
+	echo "Setup all completed"
 }
