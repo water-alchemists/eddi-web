@@ -16,7 +16,7 @@ echo "Setup Exited"
 exit 1
 
 #Writes the configuration file for hostapd
-writeHostapd(){
+function writeHostapd {
 echo "Writing Hostapd Configuration file..."
 
 cat > /etc/hostapd/hostapd.conf <<EOM
@@ -50,7 +50,7 @@ echo "Write for Hostapd is completed."
 }
 
 #Writes the configuration file for Dnsmasq
-writeDnsmasq(){
+function writeDnsmasq {
 echo "Writing DNSMASQ Configuration file..."
 cat >> /etc/dnsmasq.conf <<EOM
 bind-interfaces
@@ -61,7 +61,7 @@ echo "Write for DNSMASQ completed."
 }
 
 #Does general configuration
-configure() {
+function configure {
 	echo "To configure the wifi, first answer a few questions."
 
 	echo "This will be a WPA-PSK wifi port. What would be the SSID name for this hotspot?"
@@ -78,7 +78,7 @@ configure() {
 }
 
 #Starts up the server and wifi
-start(){
+function start {
 	echo "Starting up..."
 	echo "Stopping NetworkManager..."
 	service NetworkManager stop
