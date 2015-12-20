@@ -99,23 +99,18 @@ function start {
 	echo "Configuration completed."
 
 	echo "Starting Hostapd in the background..."
-	hostapd /etc/hostapd/hostapd.conf.artik -B
+	hostapd /etc/hostapd/hostapd.conf.artik
 
 	echo "Setup all completed"
 }
 
 echo "Seems you want to start up your wifi hotspot and server on the Artik."
-echo "Was this a mistake? Y/n"
-read MISTAKE
-if [ $MISTAKE != "Y" ]
-then
-echo "Cool. Do you want to configure the settings for your wifi hotspot? Y/n"
+echo "Do you want to configure the settings for your wifi hotspot? Y/n"
 read HOTSPOT
-	if [ $HOTSPOT == "Y" ]
-	then
-		configure
-	fi
-	start
+if [ $HOTSPOT == "Y" ]
+then
+	configure
 fi
+start
 echo "Setup Exited"
 exit 1
