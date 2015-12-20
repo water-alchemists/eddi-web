@@ -1,20 +1,4 @@
 #!/bin/bash
-echo "Seems you want to start up your wifi hotspot and server on the Artik."
-echo "Was this a mistake? Y/n"
-read MISTAKE
-if [ $MISTAKE != "Y" ]
-then
-echo "Cool. Do you want to configure the settings for your wifi hotspot? Y/n"
-read HOTSPOT
-	if [ $HOTSPOT != "Y" ]
-	then
-		configure
-	fi
-	start
-fi
-echo "Setup Exited"
-exit 1
-
 #Writes the configuration file for hostapd
 function writeHostapd {
 echo "Writing Hostapd Configuration file..."
@@ -119,3 +103,19 @@ function start {
 
 	echo "Setup all completed"
 }
+
+echo "Seems you want to start up your wifi hotspot and server on the Artik."
+echo "Was this a mistake? Y/n"
+read MISTAKE
+if [ $MISTAKE != "Y" ]
+then
+echo "Cool. Do you want to configure the settings for your wifi hotspot? Y/n"
+read HOTSPOT
+	if [ $HOTSPOT != "Y" ]
+	then
+		configure
+	fi
+	start
+fi
+echo "Setup Exited"
+exit 1
