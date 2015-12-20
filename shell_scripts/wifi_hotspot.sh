@@ -99,7 +99,7 @@ function start {
 	echo "Configuration completed."
 
 	echo "Starting Hostapd in the background..."
-	hostapd /etc/hostapd/hostapd.conf -B
+	hostapd /etc/hostapd/hostapd.conf.artik -B
 
 	echo "Setup all completed"
 }
