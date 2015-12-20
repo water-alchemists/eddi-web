@@ -111,7 +111,7 @@ if [ $MISTAKE != "Y" ]
 then
 echo "Cool. Do you want to configure the settings for your wifi hotspot? Y/n"
 read HOTSPOT
-	if [ $HOTSPOT != "Y" ]
+	if [ $HOTSPOT == "Y" ]
 	then
 		configure
 	fi
