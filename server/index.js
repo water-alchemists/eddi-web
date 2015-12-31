@@ -1,7 +1,8 @@
 var express = require('express');
 
 var routes = require('./routes'),
-	middlewares = require('./middlewares');
+	middlewares = require('./middlewares'),
+	models = require('./models');
 
 var PORT = 3991,
 	app = express();
@@ -13,6 +14,8 @@ app.get('/', function(req, res){
 	res.send('hello world');
 });
 
-app.listen(PORT, function(){
-	console.log(['Server listening on port', PORT, '...'].join(' '));
+models.sequelize.sync().then(() => {
+	app.listen(PORT, function(){
+		console.log(['Server listening on port', PORT, '...'].join(' '));
+	});
 });

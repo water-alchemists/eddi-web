@@ -1,14 +1,12 @@
 'use strict';
-require('es6-shim');
-
-let fs = require('fs'),
+const fs = require('fs'),
 	cp = require('child_process'),
 	spawn = cp.spawn;
 
 // echo -n "27" > /sys/class/gpio/export
 // echo -n "out" > /sys/class/gpio/gpio27/direction
 
-var map = {
+const map = {
 	gpio : {
 		2 : 8,
 		3 : 9,
@@ -16,7 +14,7 @@ var map = {
 		7 : 11,
 		8 : 12,
 		9 : 13,
-		10 : 14, 
+		10 : 14,
 		11 : 16,
 		12 : 21,
 		13 : 22
@@ -74,9 +72,8 @@ function digitalWrite(pin, value){
 			  values = {
 			  	HIGH : 1,
 			  	LOW : 0
-			  };
-
-		let formattedValue = values[value];
+			  },
+			   formattedValue = values[value];
 
 		if(!formattedValue) return reject(`This is not a valid value to set pin ${pin} : ${value}`);
 
@@ -103,7 +100,7 @@ function getBoardInfo(){
 	return new Promise((resolve, reject) => {
 		const boardInfoPath = '/proc/device-tree/model';
 
-		fs.readFile(boardInfoPath, (err, data){
+		fs.readFile(boardInfoPath, (err, data) => {
 			if(err) return reject(err);
 			resolve(data);
 		});
@@ -116,5 +113,5 @@ export {
 	digitalRead,
 	digitalWrite,
 	analogRead,
-	getBoardInfo
+	getBoardInfo,
 }
