@@ -1,0 +1,17 @@
+doctype html
+html
+  head
+    meta(name="viewport" content="width=device-width, initial-scale=1.0")
+    style
+      include ./index.css
+    script(type="text/javascript")
+      include ./eddi-main.js
+  head
+  body
+    .header
+      h1
+        =title
+
+    .cards
+      each card in cards
+        include ./field-card.jade

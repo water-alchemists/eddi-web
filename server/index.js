@@ -1,18 +1,38 @@
-var express = require('express');
+const express = require('express');
 
-var routes = require('./routes'),
+const routes = require('./routes'),
 	middlewares = require('./middlewares'),
 	models = require('./models'),
 	seed = require('./seed');
 
-var PORT = 3991,
+const PORT = 3991,
 	app = express();
+
+//sets templating engine to jade
+app.set('view engine', 'jade');
 
 middlewares(app);
 app.use('/api', routes(app));
 
 app.get('/', function(req, res){
-	res.send('hello world');
+	res.render('eddi-main', {
+		cards: [
+			{
+				title: "Flow Rate",
+				value: "3.2",
+				unit: "liters per minute"
+			},{
+				title: "Salinity In",
+				value: "1024",
+				unit: "parts per million"
+			},{
+				title: "Salinity Out",
+				value: "387",
+				unit: "parts per million"
+			}
+		],
+		title: "Greenhouse 1",
+	});
 });
 
 models.sequelize.drop() // drops all previous tables in db

@@ -1,0 +1,62 @@
+body{
+  margin: 0;
+  background-color: #555;
+  font-family: Arial, sans-serif;
+}
+.header{
+  padding: 12px 24px;
+  height: 36px;
+  background-color: white;
+}
+.header h1{
+  margin: 0;
+  line-height: 36px;
+  font-size: 24px;
+  color: #2255CC;
+}
+.cards{
+  padding: 10px 0px;
+}
+.card{
+  margin: 10px;
+}
+.card-header{
+  background-color: #D85;
+  height: 42px;
+  color: white;
+  line-height: 42px;
+  padding: 0 24px;
+}
+.card-body{
+  position: relative;
+  height: 180px;
+}
+.card-left{
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0px;
+  width: 120px;
+  background-color: #35F;
+  color: white;
+  text-align: center;
+}
+.card-left .card-number{
+  font-size: 40px;
+  line-height: 100px;
+  margin-top: 32px;
+}
+.card-left .card-unit{
+  font-size: 10px;
+}
+.card-right{
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 120px;
+  background-color: #49F;
+  color: white;
+  text-align: center;
+  padding: 80px 60px;
+}
