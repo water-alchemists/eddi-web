@@ -17,7 +17,7 @@ module.exports = function(sequelize, DataTypes){
 			},
 		},
 		methods = {
-
+			freezeTableName: true,
 		},
 		Pin = sequelize.define('Pin', properties, methods);
 

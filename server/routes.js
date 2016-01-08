@@ -1,14 +1,10 @@
 'use strict';
-
+const router = require('express').Router()
 module.exports = function(app){
-	var paths = [
+	router.use('/salinity', require('./api/salinity')(app));
+	router.use('/control', require('./api/control')(app));
 
-	];
+    router.use((req, res) => res.status(404).end());
 
-	paths.map(function(path){
-		return require(path);
-	})
-	.forEach(function(router){
-		router(app);
-	});
+	return router;
 };
