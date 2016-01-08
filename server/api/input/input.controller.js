@@ -1,12 +1,11 @@
 'use strict';
 
 const models = require('../../models/'),
-	Pin = models.Pin,
-	Reading = models.Reading;
+	Input = models.Input;
 
 function getAll(req, res, next){
 
-	Pin.findAll()
+	Input.findAll()
 		.then(data => res.send(data))
 		.catch(next);
 }
