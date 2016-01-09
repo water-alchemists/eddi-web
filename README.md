@@ -1,4 +1,4 @@
-#Artik
+#eddi-web
 
 ## Setup
 1. Install Node.js on your computer. You can find a download here:  https://nodejs.org/en/download/
