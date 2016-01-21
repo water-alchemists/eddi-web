@@ -2,12 +2,6 @@
 
 module.exports = function(sequelize, DataTypes){
 	const properties = {
-			time : {
-				type : DataTypes.DATE, 
-				defaultValue : DataTypes.NOW, 
-				primaryKey : true, 
-				allowNull: false,
-			},
 			salinityIn : {
 				type : DataTypes.INTEGER,
 				allowNull: false,
@@ -20,9 +14,24 @@ module.exports = function(sequelize, DataTypes){
 				type : DataTypes.INTEGER,
 				allowNull: false,
 			},
+			id : {
+				type : DataTypes.INTEGER,
+				allowNull: false,
+				primaryKey: true,
+				autoIncrement : true,
+			}
 		},
 		methods = {
 			freezeTableName: true,
+			classMethods : {
+				getLatest : function(){
+					return this.max('id')
+							.then(id => this.findById(id))
+				},
+			},
+			instanceMethods: {
+				
+			}
 		},
 		Reading = sequelize.define('Reading', properties, methods);
 

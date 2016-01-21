@@ -6,10 +6,17 @@ const models = require('../../models/'),
 function getAll(req, res, next){
 
 	Reading.findAll()
-		.then(data => res.send(data))
+		.then(data => res.status(200).json(data))
+		.catch(next);
+}
+
+function getLatest(req, res, next){
+	Reading.getLatest()
+		.then(data => res.status(200).json(data))
 		.catch(next);
 }
 
 module.exports = {
-	getAll : getAll
+	getAll,
+	getLatest,
 };

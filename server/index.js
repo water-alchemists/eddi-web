@@ -1,6 +1,8 @@
+'use strict';
 const express = require('express');
 
-const routes = require('./routes'),
+const apiRoutes = require('./routes'),
+	mainRoutes = require('./main'),
 	middlewares = require('./middlewares'),
 	models = require('./models'),
 	seed = require('./seed');
@@ -8,32 +10,9 @@ const routes = require('./routes'),
 const PORT = 3991,
 	app = express();
 
-//sets templating engine to jade
-app.set('view engine', 'jade');
-
 middlewares(app);
-app.use('/api', routes(app));
-
-app.get('/', function(req, res){
-	res.render('eddi-main', {
-		cards: [
-			{
-				title: "Flow Rate",
-				value: "3.2",
-				unit: "liters per minute"
-			},{
-				title: "Salinity In",
-				value: "1024",
-				unit: "parts per million"
-			},{
-				title: "Salinity Out",
-				value: "387",
-				unit: "parts per million"
-			}
-		],
-		title: "Greenhouse 1",
-	});
-});
+app.use('/api', apiRoutes(app));
+mainRoutes(app);
 
 models.sequelize.drop() // drops all previous tables in db
 	.then(() => models.sequelize.sync()) // creates all tables defined 

@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/water-alchemists/Artik#readme",
   "devDependencies": {
+    "body-parser": "^1.14.2",
     "express": "^4.13.3",
     "sequelize": "^3.15.0",
     "sqlite3": "^3.1.1"

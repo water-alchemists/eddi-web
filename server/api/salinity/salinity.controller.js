@@ -7,10 +7,18 @@ const models = require('../../models/'),
 function getAll(req, res, next){
 
 	Pin.findAll()
-		.then(data => res.send(data))
+		.then(data => res.status(200).json(data))
+		.catch(next);
+}
+
+function getLatest(req, res, next){
+
+	Pin.getLatest()
+		.then(data => res.status(200).json(data))
 		.catch(next);
 }
 
 module.exports = {
-	getAll : getAll
+	getAll,
+	getLatest,
 };

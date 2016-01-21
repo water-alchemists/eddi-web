@@ -4,5 +4,6 @@ const router = require('express').Router(),
 
 module.exports = function(app){
 	router.get('/', controllers.getAll);
+	router.get('/latest', controllers.getLatest);
 	return router;
 };
