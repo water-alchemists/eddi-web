@@ -1,12 +1,13 @@
 'use strict';
-const fs = require('fs'),
-	cp = require('child_process'),
-	spawn = cp.spawn;
+const fs = require('fs');
+
+const promises = require('../promises');
 
 // echo -n "27" > /sys/class/gpio/export
 // echo -n "out" > /sys/class/gpio/gpio27/direction
 
-const map = {
+const gpioBasePath = '/sys/class/gpio',
+	map = {
 	gpio : {
 		2 : 8,
 		3 : 9,
@@ -23,6 +24,7 @@ const map = {
 
 function getExportedGpio(){
 	console.log('getting list of gpio pins');
+	const gpioListPath = `${gpioBasePath}/export`;
 	return new Promise((resolve, reject) => {
 		fs.readFile(gpioListPath, (err, data) => {
 			if(err) return reject(err);
@@ -33,15 +35,14 @@ function getExportedGpio(){
 
 function digitalPinMode(pin, direction){
 	return new Promise((resolve, reject) => {
-		const gpioListPath = '/sys/class/gpio/export',
-			  gpioPinPath = `/sys/class/gpio/gpio${pin}/direction`,
-			  values = {
+		const gpioPinPath = `/sys/class/gpio/gpio${pin}/direction`,
+			values = {
 				INPUT : 'in',
 				OUTPUT : 'out'
-			  };
+			};
 
 		//may not use a map, just use array for now
-		if(!map.gpio[pinString]) return reject(new Error(`This is not a valid gpio pin : ${pin}`));
+		if(!map.gpio[pin]) return reject(new Error(`This is not a valid gpio pin : ${pin}`));
 		if(!values[direction]) return reject(new Error(`This is not a valid direction to set gpio pin ${pin} : ${direction}`))
 
 		console.log(`checking to see if pin ${pin} exists`);
@@ -69,11 +70,11 @@ function digitalRead(pin){
 function digitalWrite(pin, value){
 	return new Promise((resolve, reject) => {
 		const gpioPinPath = `/sys/class/gpio/gpio${pin}/value`,
-			  values = {
-			  	HIGH : 1,
-			  	LOW : 0
-			  },
-			   formattedValue = values[value];
+			values = {
+				HIGH : 1,
+				LOW : 0
+			},
+			formattedValue = values[value];
 
 		if(!formattedValue) return reject(`This is not a valid value to set pin ${pin} : ${value}`);
 
@@ -107,7 +108,7 @@ function getBoardInfo(){
 	});
 }
 
-export {
+module.exports = {
 	getExportedGpio,
 	digitalPinMode,
 	digitalRead,

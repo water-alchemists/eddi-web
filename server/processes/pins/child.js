@@ -1,11 +1,15 @@
 'use strict';
 const PinModel = require('../../models/pin');
 
-module.exports = function(){
-	console.log('these are the process environments', process.env);
-	const analogPins = process.env.analogPins,
-		digitalReadPins = process.env.digitalReadPins,
-		digitalWritePins = process.env.digitalWritePins;
+const promises = require('../../../modules/promises'),
+	artik = require('../../../modules/artik/artik');
+
+const analogPinsEnv = process.env.analogPins,
+	digitalReadPinsEnv = process.env.digitalReadPins,
+	digitalWritePinsEnv = process.env.digitalWritePins,
+	analogPins = Array.isArray(analogPinsEnv) ? analogPinsEnv : analogPinsEnv.split(','),
+	digitalReadPins = Array.isArray(digitalReadPinsEnv) ? digitalReadPinsEnv : digitalReadPinsEnv.split(','),
+	digitalWritePins = Array.isArray(digitalWritePinsEnv) ? digitalWritePinsEnv : digitalWritePinsEnv.split(',');
 
 	function setupAnalogRead(pin){
 
@@ -14,8 +18,15 @@ module.exports = function(){
 	function setupDigitalRead(){
 
 	}
-
+	
 	function setupDigitalWrite(){
-
+		
 	}
-}
+	process.on('message', message => {
+		console.log(`This is the message ${message}`);
+		process.stdout.write('hello');
+		process.send({ data: message, env : {analogPins, digitalReadPins, digitalWritePins}});
+	});
+
+
+// }

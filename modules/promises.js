@@ -28,6 +28,15 @@ function appendFile(path, data){
 	});
 }
 
+function checkPathExists(path){
+	return new Promise((resolve, reject) => {
+		fs.stat(path, (err, data) => {
+			if(err) return reject(err);
+			resolve(data);
+		});
+	});
+}
+
 function delay(ms){
 	return new Promise((resolve, reject) => {
 		let id;
@@ -67,6 +76,7 @@ module.exports = {
 	readFile,
 	writeFile,
 	appendFile,
+	checkPathExists,
 	delay,
 	polling,
 }

@@ -12,5 +12,9 @@ module.exports = function(app){
 
 	//exposes node_modules
 	app.use('/modules', express.static(path.resolve(__dirname, '../../node_modules')));
+	
+	//exposes assets
+	app.use(express.static(path.resolve(__dirname, '../../public')));
+
 	return app;
 }
