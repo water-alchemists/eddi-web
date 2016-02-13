@@ -3,7 +3,7 @@ const PinModel = require('../../models/pin'),
 	ReadingModel = require('../../models/reading');
 
 const promises = require('../../../modules/promises'),
-	artik = require('../../../modules/artik/artik');
+	artik = require('../../../modules/artik');
 
 const analogPinsEnv = process.env.analogPins,
 	digitalReadPinsEnv = process.env.digitalReadPins,
@@ -25,8 +25,9 @@ const analogPinsEnv = process.env.analogPins,
 	}
 	process.on('message', message => {
 		console.log(`This is the message ${message}`);
+		const id = message.id;
 		process.stdout.write('hello');
-		process.send({ data: message, env : {analogPins, digitalReadPins, digitalWritePins}});
+		process.send({ id, data: message, env : {analogPins, digitalReadPins, digitalWritePins}});
 	});
 
 

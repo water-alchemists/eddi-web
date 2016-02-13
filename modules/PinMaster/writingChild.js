@@ -2,7 +2,7 @@
 const PinModel = require('../../models/pin');
 
 const promises = require('../../../modules/promises'),
-	artik = require('../../../modules/artik/artik');
+	artik = require('../../../modules/artik');
 
 const digitalWritePinsEnv = process.env.digitalWritePins,
 	digitalWritePins = Array.isArray(digitalWritePinsEnv) ? digitalWritePinsEnv : digitalWritePinsEnv.split(',');
