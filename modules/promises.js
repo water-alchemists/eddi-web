@@ -30,7 +30,7 @@ function appendFile(path, data){
 
 function checkPathExists(path){
 	return new Promise((resolve, reject) => {
-		fs.stat(path, (err, data) => {
+		fs.open(path, (err, data) => {
 			if(err) return reject(err);
 			resolve(data);
 		});
@@ -41,13 +41,13 @@ function delay(ms){
 	return new Promise((resolve, reject) => {
 		let id;
 
-		function settingTimeout(){ 
-			id = setTimeout(() => clearingTimeout(), ms); 
-		}
-
 		function clearingTimeout(){
 			clearTimeout(id);
 			resolve();
+		}
+
+		function settingTimeout(){ 
+			id = setTimeout(() => clearingTimeout(), ms); 
 		}
 
 		try {
@@ -66,7 +66,7 @@ function polling(ms, retries, action){
 			.then(data => {
 				return delay(ms).then(() => action(data));
 			})
-			.catch(err => {
+			.catch(() => {
 				return polling(ms, retries, action);
 			})
 	});

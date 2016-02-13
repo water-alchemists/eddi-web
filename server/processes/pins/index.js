@@ -58,10 +58,14 @@ PinMaster.prototype.createProcess = function(){
 	child.on('message', (message) => {
 		console.log('got a message back', message);
 		const id = message.id,
-			data = message.data;
+			data = message.data,
+			error = message.error;
 
 		//triggers the callback url for that task
-		if(this.tasks[id]) this.tasks[id](data);
+		if(this.tasks[id]) {
+			if(error) this.task[id](error)
+			else this.tasks[id](null, data);
+		}
 
 		//delete the task once completed
 		delete this.tasks[id];
@@ -82,12 +86,13 @@ PinMaster.prototype.digitalWrite = function(queryPin, value){
 
 	return new Promise((resolve, reject) => {
 		if(!isWriteable) return reject(`Pin ${queryPin} is not set up to be a digital writeable pin.`);
-		const id = new Date(),
+		const id = (new Date()).toString(),
 			data = Object.assign({}, { id, value }, { direction: 'out'});
 
 		console.log('this is hte data that i am sending', data);
 		//assign a callback
-		this.tasks[id] = function(reply){
+		this.tasks[id] = function(error, reply){
+			if(error) return reject(error);
 			resolve(reply);
 		};
 

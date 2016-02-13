@@ -1,6 +1,4 @@
 'use strict';
-const fs = require('fs');
-
 const promises = require('../promises');
 
 // echo -n "27" > /sys/class/gpio/export
@@ -8,109 +6,112 @@ const promises = require('../promises');
 
 const gpioBasePath = '/sys/class/gpio',
 	map = {
-	gpio : {
-		2 : 8,
-		3 : 9,
-		4 : 10,
-		7 : 11,
-		8 : 12,
-		9 : 13,
-		10 : 14,
-		11 : 16,
-		12 : 21,
-		13 : 22
-	}
-};
+		gpio : {
+			2 : 8,
+			3 : 9,
+			4 : 10,
+			7 : 11,
+			8 : 12,
+			9 : 13,
+			10 : 14,
+			11 : 16,
+			12 : 21,
+			13 : 22
+		}
+	};
+
+function isValidDigitalPin(pin){
+	return new Promise((resolve, reject) => {
+		if(!map.gpio[pin]) return reject(new Error(`This is not a valid gpio pin : ${pin}`));
+		resolve();
+	});
+}
 
 function getExportedGpio(){
 	console.log('getting list of gpio pins');
 	const gpioListPath = `${gpioBasePath}/export`;
-	return new Promise((resolve, reject) => {
-		fs.readFile(gpioListPath, (err, data) => {
-			if(err) return reject(err);
-			return data;
-		});
-	})
+	return promises.readFile(gpioListPath);
 }
 
-function digitalPinMode(pin, direction){
+function isDigitalPinExported(pin){
+	const gpioPinPath = `${gpioBasePath}/gpio${pin}`
+	return isValidDigitalPin(pin)
+		.then(() => promises.checkPathExists(gpioPinPath));
+}
+
+function exportDigitalPin(pin){
+	const gpioExportPath = `${gpioBasePath}/export`;
+	return isValidDigitalPin(pin)
+		.then(() => promises.writeFile(gpioExportPath, pin));
+}
+
+function unexportDigitalPin(pin){
+	const gpioUnexportPath = `${gpioBasePath}/unexport`;
+	return isValidDigitalPin(pin)
+		.then(() => promises.writeFile(gpioUnexportPath, pin));
+}
+
+function setDigitalPinMode(pin, mode){
+	const gpioPinPath = `${gpioBasePath}/gpio${pin}/direction`,
+		values = {
+			READ : 'in',
+			WRITE : 'out'
+		},
+		data = values[mode];
+
 	return new Promise((resolve, reject) => {
-		const gpioPinPath = `/sys/class/gpio/gpio${pin}/direction`,
-			values = {
-				INPUT : 'in',
-				OUTPUT : 'out'
-			};
+		if(!data) return reject(new Error(`${data} is not a valid input value to set pin.`));
+		resolve();
+	})
+	.then(() => isValidDigitalPin(pin))
+	.then(() => promises.writeFile(gpioPinPath, data));
+}
 
-		//may not use a map, just use array for now
-		if(!map.gpio[pin]) return reject(new Error(`This is not a valid gpio pin : ${pin}`));
-		if(!values[direction]) return reject(new Error(`This is not a valid direction to set gpio pin ${pin} : ${direction}`))
+function getDigitalPinMode(pin){
+	const gpioPinPath = `${gpioBasePath}/gpio${pin}/direction`;
 
-		console.log(`checking to see if pin ${pin} exists`);
-		fs.appendFile(gpioListPath, `${pin}`, (err) => {
-			if(err) return reject(err);
-			fs.writeFile(gpioPinPath, values[direction], (err, data) => {
-				if(err) return reject(err);
-				resolve(data);
-			});
-		});
-	});
+	return isValidDigitalPin(pin)
+		.then(() => promises.readFile(gpioPinPath));
 }
 
 function digitalRead(pin){
-	return new Promise((resolve, reject) => {
-		const gpioPinPath = `/sys/class/gpio/gpio${pin}/value`;
-
-		fs.readFile(gpioPinPath, (err, data) => {
-			if(err) return reject(err);
-			resolve(data);
-		});
-	});
+	const gpioPinPath = `/sys/class/gpio/gpio${pin}/value`;
+	return isValidDigitalPin(pin)
+		.then(() => promises.readFile(gpioPinPath));
 }
 
 function digitalWrite(pin, value){
+	const gpioPinPath = `/sys/class/gpio/gpio${pin}/value`,
+		values = {
+			HIGH : 1,
+			LOW : 0
+		},
+		formattedValue = values[value];
+
 	return new Promise((resolve, reject) => {
-		const gpioPinPath = `/sys/class/gpio/gpio${pin}/value`,
-			values = {
-				HIGH : 1,
-				LOW : 0
-			},
-			formattedValue = values[value];
-
-		if(!formattedValue) return reject(`This is not a valid value to set pin ${pin} : ${value}`);
-
-		fs.writeFile(gpioPinPath, `${formattedValue}\n`, (err, data) => {
-			if(err) return reject(err);
-			resolve(data);
-		});
-
-	});
+		if(!formattedValue) return reject(new Error(`This is not a valid value to set pin ${pin} : ${value}`));
+		resolve();
+	})
+	.then(() => promises.writeFile(gpioPinPath, formattedValue));
 }
 
 function analogRead(pin){
-	return new Promise((resolve, reject) => {
-		const analogPinPath = `/sys/devices/12d10000.adc/iio:device0/in_voltage${pin}_raw`;
-
-		fs.readFile(analogPinPath, (err, data) => {
-			if(err) return reject(err);
-			resolve(data);
-		});
-	});
+	const analogPinPath = `/sys/devices/12d10000.adc/iio:device0/in_voltage${pin}_raw`;
+	return promises.readFile(analogPinPath);
 }
 
 function getBoardInfo(){
-	return new Promise((resolve, reject) => {
-		const boardInfoPath = '/proc/device-tree/model';
-
-		fs.readFile(boardInfoPath, (err, data) => {
-			if(err) return reject(err);
-			resolve(data);
-		});
-	});
+	const boardInfoPath = '/proc/device-tree/model';
+	return promises.readFile(boardInfoPath);
 }
 
 module.exports = {
 	getExportedGpio,
-	digitalPinMode,
+	isDigitalPinExported,
+	exportDigitalPin,
+	unexportDigitalPin,
+	setDigitalPinMode,
+	getDigitalPinMode,
 	digitalRead,
 	digitalWrite,
 	analogRead,
